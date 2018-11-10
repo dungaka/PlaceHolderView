@@ -270,10 +270,12 @@ public class SwipePlaceHolderView extends FrameLayout implements
     protected <V extends FrameLayout, T extends SwipeViewBinder>void attachSwipeInfoViews(V frame, T swipeViewBinder, SwipeDecor swipeDecor){
 
         if(swipeDecor.getSwipeInMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
-                && swipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL){
+                && swipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
+                    && swipeDecor.getSwipeUpMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL){
 
             FrameLayout swipeInMsgView = new FrameLayout(getContext());
             FrameLayout swipeOutMsgView = new FrameLayout(getContext());
+            FrameLayout swipeUpMsgView = new FrameLayout(getContext());
 
             FrameLayout.LayoutParams layoutParamsInMsg = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -281,23 +283,33 @@ public class SwipePlaceHolderView extends FrameLayout implements
             FrameLayout.LayoutParams layoutParamsOutMsg = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+
+            FrameLayout.LayoutParams layoutParamsUpMsg = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
             layoutParamsInMsg.gravity = mSwipeDecor.getSwipeInMsgGravity();
             layoutParamsOutMsg.gravity = mSwipeDecor.getSwipeOutMsgGravity();
+            layoutParamsUpMsg.gravity = mSwipeDecor.getSwipeUpMsgGravity();
 
             swipeInMsgView.setLayoutParams(layoutParamsInMsg);
             swipeOutMsgView.setLayoutParams(layoutParamsOutMsg);
+            swipeUpMsgView.setLayoutParams(layoutParamsUpMsg);
 
             mLayoutInflater.inflate(swipeDecor.getSwipeInMsgLayoutId(), swipeInMsgView, true);
             mLayoutInflater.inflate(swipeDecor.getSwipeOutMsgLayoutId(), swipeOutMsgView, true);
+            mLayoutInflater.inflate(swipeDecor.getSwipeUpMsgLayoutId(), swipeUpMsgView, true);
 
             frame.addView(swipeInMsgView);
             frame.addView(swipeOutMsgView);
+            frame.addView(swipeUpMsgView);
 
             swipeInMsgView.setVisibility(GONE);
             swipeOutMsgView.setVisibility(GONE);
+            swipeUpMsgView.setVisibility(GONE);
 
             swipeViewBinder.setSwipeInMsgView(swipeInMsgView);
             swipeViewBinder.setSwipeOutMsgView(swipeOutMsgView);
+            swipeViewBinder.setSwipeUpMsgView(swipeUpMsgView);
         }
     }
 
@@ -510,6 +522,7 @@ public class SwipePlaceHolderView extends FrameLayout implements
                 || distYMovedAbs > mSwipeDecor.getSwipeDistToDisplayMsg())){
 
             boolean isSwipeIn = false;
+            boolean isSwipeUp = false;
             if (distXMoved > 0) {
                 isSwipeIn = true;
             } else if (distXMoved < 0) {
@@ -528,10 +541,28 @@ public class SwipePlaceHolderView extends FrameLayout implements
                 swipeViewBinder.bindSwipeOutState();
             }
 
-            if (mSwipeDecor.getSwipeInMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
-                    && mSwipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL) {
+            isSwipeUp = distYMoved < 0 && Math.abs(distYMoved) > Math.abs(distXMoved);
 
-                if (isSwipeIn) {
+            if (mSwipeDecor.getSwipeInMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
+                    && mSwipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
+                        && mSwipeDecor.getSwipeUpMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL) {
+
+                if (isSwipeUp) {
+                    if (swipeViewBinder.getSwipeInMsgView() != null
+                            && swipeViewBinder.getSwipeInMsgView().getVisibility() == VISIBLE) {
+                        swipeViewBinder.getSwipeInMsgView().setVisibility(GONE);
+                    }
+                    if (swipeViewBinder.getSwipeOutMsgView() != null
+                            && swipeViewBinder.getSwipeOutMsgView().getVisibility() == VISIBLE) {
+                        swipeViewBinder.getSwipeOutMsgView().setVisibility(GONE);
+                    }
+                    if (swipeViewBinder.getSwipeUpMsgView() != null
+                            && swipeViewBinder.getSwipeUpMsgView().getVisibility() == GONE) {
+                        swipeViewBinder.getSwipeUpMsgView().setVisibility(VISIBLE);
+                    }
+                }
+
+                else if (isSwipeIn) {
                     if (swipeViewBinder.getSwipeInMsgView() != null
                             && swipeViewBinder.getSwipeInMsgView().getVisibility() == GONE) {
                         swipeViewBinder.getSwipeInMsgView().setVisibility(VISIBLE);
@@ -539,6 +570,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
                     if (swipeViewBinder.getSwipeOutMsgView() != null
                             && swipeViewBinder.getSwipeOutMsgView().getVisibility() == VISIBLE) {
                         swipeViewBinder.getSwipeOutMsgView().setVisibility(GONE);
+                    }
+                    if (swipeViewBinder.getSwipeUpMsgView() != null
+                            && swipeViewBinder.getSwipeUpMsgView().getVisibility() == VISIBLE) {
+                        swipeViewBinder.getSwipeUpMsgView().setVisibility(GONE);
                     }
                 } else {
                     if (swipeViewBinder.getSwipeOutMsgView() != null
@@ -548,6 +583,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
                     if (swipeViewBinder.getSwipeInMsgView() != null
                             && swipeViewBinder.getSwipeInMsgView().getVisibility() == VISIBLE) {
                         swipeViewBinder.getSwipeInMsgView().setVisibility(GONE);
+                    }
+                    if (swipeViewBinder.getSwipeUpMsgView() != null
+                            && swipeViewBinder.getSwipeUpMsgView().getVisibility() == VISIBLE) {
+                        swipeViewBinder.getSwipeUpMsgView().setVisibility(GONE);
                     }
                 }
             }
@@ -570,7 +609,8 @@ public class SwipePlaceHolderView extends FrameLayout implements
         }
 
         if(mSwipeDecor.getSwipeInMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
-                && mSwipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL) {
+                && mSwipeDecor.getSwipeOutMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL
+                    && mSwipeDecor.getSwipeUpMsgLayoutId() != SwipeDecor.PRIMITIVE_NULL) {
             if (swipeViewBinder.getSwipeInMsgView() != null
                     && swipeViewBinder.getSwipeInMsgView().getVisibility() == VISIBLE) {
                 swipeViewBinder.getSwipeInMsgView().setVisibility(GONE);
@@ -579,6 +619,11 @@ public class SwipePlaceHolderView extends FrameLayout implements
             if (swipeViewBinder.getSwipeOutMsgView() != null
                     && swipeViewBinder.getSwipeOutMsgView().getVisibility() == VISIBLE) {
                 swipeViewBinder.getSwipeOutMsgView().setVisibility(GONE);
+            }
+
+            if (swipeViewBinder.getSwipeUpMsgView() != null
+                    && swipeViewBinder.getSwipeUpMsgView().getVisibility() == VISIBLE) {
+                swipeViewBinder.getSwipeUpMsgView().setVisibility(GONE);
             }
         }
         swipeViewBinder.getLayoutView().setRotation(0);

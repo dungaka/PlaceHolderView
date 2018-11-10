@@ -19,9 +19,11 @@ public class SwipeDecor {
     private boolean mAnimateScale = true;
     private int mSwipeInMsgLayoutId = PRIMITIVE_NULL;
     private int mSwipeOutMsgLayoutId = PRIMITIVE_NULL;
+    private int mSwipeUpMsgLayoutId = PRIMITIVE_NULL;
     private int mViewGravity = Gravity.CENTER;
     private int mSwipeInMsgGravity = Gravity.CENTER;
     private int mSwipeOutMsgGravity = Gravity.CENTER;
+    private int mSwipeUpMsgGravity = Gravity.CENTER;
     private int mSwipeDistToDisplayMsg = 30;
     private int mSwipeAnimTime = 200;
     private float mSwipeAnimFactor = 0.75f;
@@ -111,6 +113,18 @@ public class SwipeDecor {
         return this;
     }
 
+    public int getSwipeUpMsgLayoutId() {
+        return mSwipeUpMsgLayoutId;
+    }
+
+    public SwipeDecor setSwipeUpMsgLayoutId(int layoutId) {
+        if (layoutId < 0) {
+            layoutId = PRIMITIVE_NULL;
+        }
+        mSwipeUpMsgLayoutId = layoutId;
+        return this;
+    }
+
     public int getSwipeInMsgGravity() {
         return mSwipeInMsgGravity;
     }
@@ -126,6 +140,15 @@ public class SwipeDecor {
 
     public SwipeDecor setSwipeOutMsgGravity(int gravity) {
         mSwipeOutMsgGravity = gravity;
+        return this;
+    }
+
+    public int getSwipeUpMsgGravity() {
+        return mSwipeUpMsgGravity;
+    }
+
+    public SwipeDecor setSwipeUpMsgGravity(int gravity) {
+        mSwipeUpMsgGravity = gravity;
         return this;
     }
 

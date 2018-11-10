@@ -33,9 +33,10 @@ public abstract class SwipeViewBinder<
     private int mSwipeType = SwipePlaceHolderView.SWIPE_TYPE_DEFAULT;
     private View mSwipeInMsgView;
     private View mSwipeOutMsgView;
+    private View mSwipeUpMsgView;
     private P mSwipeOption;
     private Q mSwipeDecor;
-//    TODO: Make mHasInterceptedEvent a AtomicBoolean, to make it thread safe.
+    //    TODO: Make mHasInterceptedEvent a AtomicBoolean, to make it thread safe.
     private boolean mHasInterceptedEvent = false;
     private int mOriginalLeftMargin;
     private int mOriginalTopMargin;
@@ -60,11 +61,11 @@ public abstract class SwipeViewBinder<
         resolveView(getResolver());
     }
 
-    protected void setOnTouch(){
+    protected void setOnTouch() {
         bindClick(getResolver(), getLayoutView());
         bindLongClick(getResolver(), getLayoutView());
         bindSwipeHead(getResolver());
-        switch (mSwipeType){
+        switch (mSwipeType) {
             case SwipePlaceHolderView.SWIPE_TYPE_DEFAULT:
                 setDefaultTouchListener(mLayoutView);
                 break;
@@ -80,51 +81,58 @@ public abstract class SwipeViewBinder<
     protected void setAnimatorListener() {
         mViewRemoveAnimatorListener = new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(mSwipeOption.getIsPutBackActive()){
+                if (mSwipeOption.getIsPutBackActive()) {
                     mLayoutView.animate()
                             .translationX(mTransXToRestore)
                             .translationY(mTransYToRestore)
                             .setInterpolator(new AccelerateInterpolator(mSwipeDecor.getSwipeAnimFactor()))
-                            .setDuration((long)(mSwipeDecor.getSwipeAnimTime()))
+                            .setDuration((long) (mSwipeDecor.getSwipeAnimTime()))
                             .setListener(mViewPutBackAnimatorListener)
                             .start();
-                }else if(mCallback != null){
+                } else if (mCallback != null) {
                     mCallback.onRemoveView(SwipeViewBinder.this);
                 }
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         };
 
         mViewRestoreAnimatorListener = new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if(mCallback != null){
+                if (mCallback != null) {
                     mCallback.onResetView(SwipeViewBinder.this);
                 }
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         };
 
         mViewPutBackAnimatorListener = new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -132,10 +140,12 @@ public abstract class SwipeViewBinder<
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         };
     }
 
@@ -157,26 +167,27 @@ public abstract class SwipeViewBinder<
             private boolean resetDone = false;
             private PointF pointerCurrentPoint = new PointF();
             private PointF pointerStartingPoint = new PointF();
+
             @Override
             public boolean onTouch(final View v, MotionEvent event) {
 
-                if(mSwipeOption.getIsTouchSwipeLocked()){
-                    if(mSwipeOption.getIsViewToRestoreOnTouchLock()){
+                if (mSwipeOption.getIsTouchSwipeLocked()) {
+                    if (mSwipeOption.getIsViewToRestoreOnTouchLock()) {
                         mSwipeOption.setIsViewToRestoreOnTouchLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(mSwipeOption.getIsViewLocked()){
-                    if(mSwipeOption.getIsViewToRestoredOnLock()){
+                if (mSwipeOption.getIsViewLocked()) {
+                    if (mSwipeOption.getIsViewToRestoredOnLock()) {
                         mSwipeOption.setIsViewToRestoredOnLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(!mHasInterceptedEvent){
+                if (!mHasInterceptedEvent) {
                     pointerStartingPoint.set(event.getRawX(), event.getRawY());
                     pointerCurrentPoint.set(event.getRawX(), event.getRawY());
                     activePointerId = event.getPointerId(0);
@@ -191,10 +202,12 @@ public abstract class SwipeViewBinder<
                     case MotionEvent.ACTION_DOWN:
                         break;
                     case MotionEvent.ACTION_POINTER_UP:
-                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {}
-                        else{break;}
+                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {
+                        } else {
+                            break;
+                        }
                     case MotionEvent.ACTION_UP:
-                        if(!resetDone) {
+                        if (!resetDone) {
                             float distSlideX = pointerCurrentPoint.x - dx;
                             float distSlideY = pointerCurrentPoint.y - dy;
 
@@ -203,9 +216,8 @@ public abstract class SwipeViewBinder<
                             if (distSlideX < displayMetrics.widthPixels / mSwipeOption.getWidthSwipeDistFactor()
                                     && distSlideY < displayMetrics.heightPixels / mSwipeOption.getHeightSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
-                            }
-                            else {
-                                if(!mSwipeOption.getIsPutBackActive()) {
+                            } else {
+                                if (!mSwipeOption.getIsPutBackActive()) {
                                     blockTouch();
                                 }
 
@@ -234,19 +246,23 @@ public abstract class SwipeViewBinder<
                                         .translationX(transX)
                                         .translationY(transY)
                                         .setInterpolator(new AccelerateInterpolator(mSwipeDecor.getSwipeAnimFactor()))
-                                        .setDuration((long)(mSwipeDecor.getSwipeAnimTime() * 1.25))
+                                        .setDuration((long) (mSwipeDecor.getSwipeAnimTime() * 1.25))
                                         .setListener(mViewRemoveAnimatorListener)
                                         .start();
                             }
                             new CountDownTimer(mSwipeDecor.getSwipeAnimTime(), mSwipeDecor.getSwipeAnimTime()) {
-                                public void onTick(long millisUntilFinished) {}
-                                public void onFinish() {mHasInterceptedEvent = false;}
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    mHasInterceptedEvent = false;
+                                }
                             }.start();
                             resetDone = true;
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if(!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
+                        if (!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
                             pointerCurrentPoint.set(event.getRawX(), event.getRawY());
                             FrameLayout.LayoutParams layoutParamsTemp = (FrameLayout.LayoutParams) v.getLayoutParams();
                             layoutParamsTemp.topMargin = (int) (pointerCurrentPoint.y - dy);
@@ -281,26 +297,27 @@ public abstract class SwipeViewBinder<
             private float dx;
             private int activePointerId = SwipeDecor.PRIMITIVE_NULL;
             private boolean resetDone = false;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(mSwipeOption.getIsTouchSwipeLocked()){
-                    if(mSwipeOption.getIsViewToRestoreOnTouchLock()){
+                if (mSwipeOption.getIsTouchSwipeLocked()) {
+                    if (mSwipeOption.getIsViewToRestoreOnTouchLock()) {
                         mSwipeOption.setIsViewToRestoreOnTouchLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(mSwipeOption.getIsViewLocked()){
-                    if(mSwipeOption.getIsViewToRestoredOnLock()){
+                if (mSwipeOption.getIsViewLocked()) {
+                    if (mSwipeOption.getIsViewToRestoredOnLock()) {
                         mSwipeOption.setIsViewToRestoredOnLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(!mHasInterceptedEvent){
+                if (!mHasInterceptedEvent) {
                     xStart = event.getRawX();
                     x = event.getRawX();
                     activePointerId = event.getPointerId(0);
@@ -314,16 +331,18 @@ public abstract class SwipeViewBinder<
                     case MotionEvent.ACTION_DOWN:
                         break;
                     case MotionEvent.ACTION_POINTER_UP:
-                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {}
-                        else{break;}
+                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {
+                        } else {
+                            break;
+                        }
                     case MotionEvent.ACTION_UP:
-                        if(!resetDone) {
+                        if (!resetDone) {
                             float distSlideX = x - dx;
                             distSlideX = distSlideX < 0 ? -distSlideX : distSlideX;
                             if (distSlideX < displayMetrics.widthPixels / mSwipeOption.getWidthSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                             } else {
-                                if(!mSwipeOption.getIsPutBackActive()) {
+                                if (!mSwipeOption.getIsPutBackActive()) {
                                     blockTouch();
                                 }
 
@@ -338,19 +357,23 @@ public abstract class SwipeViewBinder<
                                 view.animate()
                                         .translationX(transX)
                                         .setInterpolator(new AccelerateInterpolator(mSwipeDecor.getSwipeAnimFactor()))
-                                        .setDuration((long)(mSwipeDecor.getSwipeAnimTime() * 1.25))
+                                        .setDuration((long) (mSwipeDecor.getSwipeAnimTime() * 1.25))
                                         .setListener(mViewRemoveAnimatorListener)
                                         .start();
                             }
                             new CountDownTimer(mSwipeDecor.getSwipeAnimTime(), mSwipeDecor.getSwipeAnimTime()) {
-                                public void onTick(long millisUntilFinished) {}
-                                public void onFinish() {mHasInterceptedEvent = false;}
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    mHasInterceptedEvent = false;
+                                }
                             }.start();
                             resetDone = true;
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if(!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
+                        if (!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
                             x = event.getRawX();
                             FrameLayout.LayoutParams layoutParamsTemp = (FrameLayout.LayoutParams) v.getLayoutParams();
                             layoutParamsTemp.leftMargin = (int) (x - dx);
@@ -382,26 +405,27 @@ public abstract class SwipeViewBinder<
             private float dy;
             private int activePointerId = SwipeDecor.PRIMITIVE_NULL;
             private boolean resetDone = false;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(mSwipeOption.getIsTouchSwipeLocked()){
-                    if(mSwipeOption.getIsViewToRestoreOnTouchLock()){
+                if (mSwipeOption.getIsTouchSwipeLocked()) {
+                    if (mSwipeOption.getIsViewToRestoreOnTouchLock()) {
                         mSwipeOption.setIsViewToRestoreOnTouchLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(mSwipeOption.getIsViewLocked()){
-                    if(mSwipeOption.getIsViewToRestoredOnLock()){
+                if (mSwipeOption.getIsViewLocked()) {
+                    if (mSwipeOption.getIsViewToRestoredOnLock()) {
                         mSwipeOption.setIsViewToRestoredOnLock(false);
                         animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                     }
                     return true;
                 }
 
-                if(!mHasInterceptedEvent){
+                if (!mHasInterceptedEvent) {
                     yStart = event.getRawY();
                     y = event.getRawY();
                     activePointerId = event.getPointerId(0);
@@ -415,16 +439,18 @@ public abstract class SwipeViewBinder<
                     case MotionEvent.ACTION_DOWN:
                         break;
                     case MotionEvent.ACTION_POINTER_UP:
-                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {}
-                        else{break;}
+                        if (event.getPointerId(event.getActionIndex()) == activePointerId && !resetDone) {
+                        } else {
+                            break;
+                        }
                     case MotionEvent.ACTION_UP:
-                        if(!resetDone) {
+                        if (!resetDone) {
                             float distSlideY = y - dy;
                             distSlideY = distSlideY < 0 ? -distSlideY : distSlideY;
                             if (distSlideY < displayMetrics.heightPixels / mSwipeOption.getHeightSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                             } else {
-                                if(!mSwipeOption.getIsPutBackActive()) {
+                                if (!mSwipeOption.getIsPutBackActive()) {
                                     blockTouch();
                                 }
 
@@ -438,20 +464,24 @@ public abstract class SwipeViewBinder<
                                 view.animate()
                                         .translationY(transY)
                                         .setInterpolator(new AccelerateInterpolator(mSwipeDecor.getSwipeAnimFactor()))
-                                        .setDuration((long)(mSwipeDecor.getSwipeAnimTime() * 1.25))
+                                        .setDuration((long) (mSwipeDecor.getSwipeAnimTime() * 1.25))
                                         .setListener(mViewRemoveAnimatorListener)
                                         .start();
 
                             }
                             new CountDownTimer(mSwipeDecor.getSwipeAnimTime(), mSwipeDecor.getSwipeAnimTime()) {
-                                public void onTick(long millisUntilFinished) {}
-                                public void onFinish() {mHasInterceptedEvent = false;}
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                public void onFinish() {
+                                    mHasInterceptedEvent = false;
+                                }
                             }.start();
                             resetDone = true;
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if(!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
+                        if (!resetDone && event.findPointerIndex(activePointerId) != SwipeDecor.PRIMITIVE_NULL) {
                             y = event.getRawY();
                             FrameLayout.LayoutParams layoutParamsTemp = (FrameLayout.LayoutParams) v.getLayoutParams();
                             layoutParamsTemp.topMargin = (int) (y - dy);
@@ -468,7 +498,7 @@ public abstract class SwipeViewBinder<
         });
     }
 
-    protected void blockTouch(){
+    protected void blockTouch() {
         mLayoutView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent rawEvent) {
@@ -494,8 +524,8 @@ public abstract class SwipeViewBinder<
                 .setDuration(animTime)
                 .setListener(mViewRestoreAnimatorListener);
 
-        if(swipeType == SwipePlaceHolderView.SWIPE_TYPE_DEFAULT
-                || swipeType == SwipePlaceHolderView.SWIPE_TYPE_HORIZONTAL){
+        if (swipeType == SwipePlaceHolderView.SWIPE_TYPE_DEFAULT
+                || swipeType == SwipePlaceHolderView.SWIPE_TYPE_HORIZONTAL) {
             animatorX = ValueAnimator.ofInt(layoutParamsFinal.leftMargin, originalLeftMargin);
             animatorX.setInterpolator(decelerateInterpolator);
             animatorX.setDuration(animTime);
@@ -508,8 +538,8 @@ public abstract class SwipeViewBinder<
 
             });
         }
-        if(swipeType == SwipePlaceHolderView.SWIPE_TYPE_DEFAULT
-                || swipeType == SwipePlaceHolderView.SWIPE_TYPE_VERTICAL){
+        if (swipeType == SwipePlaceHolderView.SWIPE_TYPE_DEFAULT
+                || swipeType == SwipePlaceHolderView.SWIPE_TYPE_VERTICAL) {
             animatorY = ValueAnimator.ofInt(layoutParamsFinal.topMargin, originalTopMargin);
             animatorY.setInterpolator(decelerateInterpolator);
             animatorY.setDuration(animTime);
@@ -522,19 +552,19 @@ public abstract class SwipeViewBinder<
             });
         }
 
-        if(animatorX != null){
+        if (animatorX != null) {
             animatorX.start();
         }
-        if(animatorY != null){
+        if (animatorY != null) {
             animatorY.start();
         }
         animatorR.start();
     }
 
-    protected void doSwipe(boolean isSwipeIn){
-        if(mLayoutView != null && mViewRemoveAnimatorListener != null && !mSwipeOption.getIsViewLocked()) {
-            if(!mSwipeOption.getIsPutBackActive()) {
-              blockTouch();
+    protected void doSwipe(boolean isSwipeIn) {
+        if (mLayoutView != null && mViewRemoveAnimatorListener != null && !mSwipeOption.getIsViewLocked()) {
+            if (!mSwipeOption.getIsPutBackActive()) {
+                blockTouch();
             }
 
             if (isSwipeIn) {
@@ -552,12 +582,12 @@ public abstract class SwipeViewBinder<
 
             float transX = displayMetrics.widthPixels;
             float transY = displayMetrics.heightPixels;
-            switch (mSwipeType){
+            switch (mSwipeType) {
                 case SwipePlaceHolderView.SWIPE_TYPE_DEFAULT:
-                    if(isSwipeIn){
+                    if (isSwipeIn) {
                         bindSwipeIn(getResolver());
                         animator.rotation(-mSwipeDecor.getSwipeRotationAngle());
-                    }else{
+                    } else {
                         bindSwipeOut(getResolver());
                         transX = -mLayoutView.getWidth();
                         animator.rotation(mSwipeDecor.getSwipeRotationAngle());
@@ -565,18 +595,18 @@ public abstract class SwipeViewBinder<
                     animator.translationX(transX).translationY(transY);
                     break;
                 case SwipePlaceHolderView.SWIPE_TYPE_HORIZONTAL:
-                    if(isSwipeIn){
+                    if (isSwipeIn) {
                         bindSwipeIn(getResolver());
-                    }else{
+                    } else {
                         bindSwipeOut(getResolver());
                         transX = -mLayoutView.getWidth();
                     }
                     animator.translationX(transX);
                     break;
                 case SwipePlaceHolderView.SWIPE_TYPE_VERTICAL:
-                    if(isSwipeIn){
+                    if (isSwipeIn) {
                         bindSwipeIn(getResolver());
-                    }else{
+                    } else {
                         bindSwipeOut(getResolver());
                         transY = -mLayoutView.getHeight();
                     }
@@ -605,6 +635,15 @@ public abstract class SwipeViewBinder<
 
     protected void setSwipeOutMsgView(View swipeOutMsgView) {
         mSwipeOutMsgView = swipeOutMsgView;
+    }
+
+
+    protected View getSwipeUpMsgView() {
+        return mSwipeUpMsgView;
+    }
+
+    protected void setSwipeUpMsgView(View swipeUpMsgView) {
+        mSwipeUpMsgView = swipeUpMsgView;
     }
 
     protected V getLayoutView() {
@@ -732,7 +771,9 @@ public abstract class SwipeViewBinder<
                     ? extends SwipePlaceHolderView.SwipeOption,
                     ? extends SwipeDecor>> {
         void onRemoveView(T swipeViewBinder);
+
         void onResetView(T swipeViewBinder);
+
         void onAnimateView(float distXMoved, float distYMoved, float finalXDist, float finalYDist, T swipeViewBinder);
     }
 }
