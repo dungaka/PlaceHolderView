@@ -5,6 +5,7 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeCancelState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeHead;
 import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
+import com.mindorks.placeholderview.annotations.swipe.SwipeIndex;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeView;
@@ -57,6 +58,7 @@ public class SwipeViewBinderCompiler extends ViewBinderCompiler {
                         .addBindSwipeOutStateMethod()
                         .addBindSwipeCancelStateMethod()
                         .addBindSwipeHeadStateMethod()
+                        .addBindSwipeIndexStateMethod()
                         .prepare()
                         .generate(getFiler());
             } catch (IOException e) {
@@ -76,7 +78,8 @@ public class SwipeViewBinderCompiler extends ViewBinderCompiler {
                 SwipeInState.class.getCanonicalName(),
                 SwipeOutState.class.getCanonicalName(),
                 SwipeCancelState.class.getCanonicalName(),
-                SwipeHead.class.getCanonicalName()));
+                SwipeHead.class.getCanonicalName(),
+                SwipeIndex.class.getCanonicalName()));
         annotations.addAll(super.getSupportedAnnotationTypes());
         return annotations;
     }

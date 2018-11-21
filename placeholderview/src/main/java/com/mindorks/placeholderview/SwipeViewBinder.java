@@ -78,6 +78,10 @@ public abstract class SwipeViewBinder<
         }
     }
 
+    protected void setOnIndex(int i) {
+        bindSwipeIndex(getResolver(), i);
+    }
+
     protected void setAnimatorListener() {
         mViewRemoveAnimatorListener = new Animator.AnimatorListener() {
             @Override
@@ -764,6 +768,8 @@ public abstract class SwipeViewBinder<
     protected abstract void bindSwipeCancelState();
 
     protected abstract void bindSwipeHead(T resolver);
+
+    protected abstract void bindSwipeIndex(T resolver, int i);
 
     protected interface SwipeCallback<T extends
             SwipeViewBinder<?,

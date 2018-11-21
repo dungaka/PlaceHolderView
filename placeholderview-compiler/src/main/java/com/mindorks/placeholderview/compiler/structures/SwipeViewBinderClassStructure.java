@@ -6,6 +6,7 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeCancelState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeHead;
 import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
+import com.mindorks.placeholderview.annotations.swipe.SwipeIndex;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeView;
@@ -243,6 +244,29 @@ public class SwipeViewBinderClassStructure extends ViewBinderClassStructure {
             }
         }
         getClassBuilder().addMethod(bindSwipeHeadStateMethodBuilder.build());
+        return this;
+    }
+
+    public SwipeViewBinderClassStructure addBindSwipeIndexStateMethod() throws IllegalUseException {
+        MethodSpec.Builder bindSwipeIndexStateMethodBuilder = MethodSpec
+                .methodBuilder(NameStore.Method.BIND_SWIPE_INDEX)
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PROTECTED)
+                .returns(void.class)
+                .addParameter(getClassDetail().getClassName(), NameStore.Variable.RESOLVER)
+                .addParameter(int.class, NameStore.Variable.POSITION);
+
+        for (ExecutableElement executableElement : getClassDetail().getExecutableElements()) {
+            SwipeIndex swipeIndex = executableElement.getAnnotation(SwipeIndex.class);
+            if (swipeIndex != null) {
+//                Validator.validateNoParameterMethod(executableElement, "@SwipeIndex");
+//                bindSwipeIndexStateMethodBuilder.addStatement("$N.$N($L)",
+//                        NameStore.Variable.RESOLVER,
+//                        executableElement.getSimpleName(),
+//                        NameStore.Variable.POSITION);
+            }
+        }
+        getClassBuilder().addMethod(bindSwipeIndexStateMethodBuilder.build());
         return this;
     }
 }

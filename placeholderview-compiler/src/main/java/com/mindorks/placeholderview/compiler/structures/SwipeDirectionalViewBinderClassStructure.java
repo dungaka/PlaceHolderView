@@ -132,6 +132,11 @@ public class SwipeDirectionalViewBinderClassStructure extends SwipeViewBinderCla
         return (SwipeDirectionalViewBinderClassStructure) super.addBindSwipeHeadStateMethod();
     }
 
+    @Override
+    public SwipeDirectionalViewBinderClassStructure addBindSwipeIndexStateMethod() throws IllegalUseException {
+        return (SwipeDirectionalViewBinderClassStructure) super.addBindSwipeIndexStateMethod();
+    }
+
     public SwipeDirectionalViewBinderClassStructure addBindSwipingDirectionMethod() throws IllegalUseException {
         MethodSpec.Builder bindSwipingDirectionMethodBuilder = MethodSpec
                 .methodBuilder(NameStore.Method.BIND_SWIPING_DIRECTION)
