@@ -29,6 +29,7 @@ public class SwipePlaceHolderView extends FrameLayout implements
                 SwipeDecor>> {
 
     public static final int DEFAULT_DISPLAY_VIEW_COUNT = 20;
+    public static final int DEFAULT_PREPARE_VIEW_COUNT = 3;
     public static final int SWIPE_TYPE_DEFAULT = 1;
     public static final int SWIPE_TYPE_HORIZONTAL = 2;
     public static final int SWIPE_TYPE_VERTICAL = 3;
@@ -37,6 +38,7 @@ public class SwipePlaceHolderView extends FrameLayout implements
     private SwipeViewBuilder<SwipePlaceHolderView> mSwipeViewBuilder;
     private LayoutInflater mLayoutInflater;
     private int mDisplayViewCount = DEFAULT_DISPLAY_VIEW_COUNT;
+    private int mPrepareViewCount = DEFAULT_PREPARE_VIEW_COUNT;
     private int mSwipeType = SWIPE_TYPE_DEFAULT;
     private boolean mIsReverse = false;
     private SwipeDecor mSwipeDecor;
@@ -130,6 +132,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
     protected void setDisplayViewCount(int displayViewCount) {
         mDisplayViewCount = displayViewCount;
+    }
+
+    protected void setPrepareViewCount(int prepareViewCount) {
+        mPrepareViewCount = prepareViewCount;
     }
 
     protected int getSwipeType() {
@@ -226,6 +232,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
             if(mSwipeViewBinderList.indexOf(swipeViewBinder) == 0){
                 swipeViewBinder.setOnTouch();
+            }
+
+            if (position > 0 && position < mPrepareViewCount) {
+                swipeViewBinder.setOnIndex(position);
             }
         }
         return this;
@@ -431,9 +441,12 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
         if(mSwipeViewBinderList.size() > 0){
             mSwipeViewBinderList.get(0).setOnTouch();
-            for (int i =1; i < Math.min(mDisplayViewCount,mSwipeViewBinderList.size()); i++) {
-                mSwipeViewBinderList.get(i).setOnIndex(i);
+            if (mSwipeViewBinderList.size() > 3) {
+                mSwipeViewBinderList.get(3).setOnIndex(3);
             }
+//            for (int i =1; i < Math.min(mDisplayViewCount,mSwipeViewBinderList.size()); i++) {
+//                mSwipeViewBinderList.get(i).setOnIndex(i);
+//            }
         }
         if (mSwipeOption.isUndoEnabled()) {
             mRestoreResolverOnUndo = swipeViewBinder.getResolver();

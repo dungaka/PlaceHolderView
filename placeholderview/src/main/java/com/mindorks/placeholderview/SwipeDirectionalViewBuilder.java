@@ -22,6 +22,11 @@ public class SwipeDirectionalViewBuilder<S extends SwipeDirectionalView>
     }
 
     @Override
+    public SwipeDirectionalViewBuilder<S> setPrepareViewCount(int viewCount) {
+        return (SwipeDirectionalViewBuilder<S>) super.setPrepareViewCount(viewCount);
+    }
+
+    @Override
     public SwipeDirectionalViewBuilder<S> setDisplayReverse(boolean reverse) {
         return (SwipeDirectionalViewBuilder<S>) super.setDisplayReverse(reverse);
     }

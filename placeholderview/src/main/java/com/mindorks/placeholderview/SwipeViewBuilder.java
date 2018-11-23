@@ -33,6 +33,15 @@ public class SwipeViewBuilder<S extends SwipePlaceHolderView> {
         return this;
     }
 
+    public SwipeViewBuilder<S> setPrepareViewCount(int viewCount) {
+        if(viewCount < 0){
+            mSwipePlaceHolderView.setPrepareViewCount(SwipePlaceHolderView.DEFAULT_PREPARE_VIEW_COUNT);
+        }else{
+            mSwipePlaceHolderView.setPrepareViewCount(viewCount);
+        }
+        return this;
+    }
+
     public SwipeViewBuilder<S> setDisplayReverse(boolean reverse) {
         mSwipePlaceHolderView.setIsReverse(reverse);
         return this;

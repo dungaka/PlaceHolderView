@@ -260,10 +260,10 @@ public class SwipeViewBinderClassStructure extends ViewBinderClassStructure {
             SwipeIndex swipeIndex = executableElement.getAnnotation(SwipeIndex.class);
             if (swipeIndex != null) {
 //                Validator.validateNoParameterMethod(executableElement, "@SwipeIndex");
-//                bindSwipeIndexStateMethodBuilder.addStatement("$N.$N($L)",
-//                        NameStore.Variable.RESOLVER,
-//                        executableElement.getSimpleName(),
-//                        NameStore.Variable.POSITION);
+                bindSwipeIndexStateMethodBuilder.addStatement("$N.$N($L)",
+                        NameStore.Variable.RESOLVER,
+                        executableElement.getSimpleName(),
+                        NameStore.Variable.POSITION);
             }
         }
         getClassBuilder().addMethod(bindSwipeIndexStateMethodBuilder.build());
