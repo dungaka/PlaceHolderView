@@ -2,9 +2,10 @@ package com.mindorks.placeholderview.widget;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+//import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.EditText;
+import androidx.annotation.NonNull;
 
 /**
  * Created by janisharali on 16/02/18.
