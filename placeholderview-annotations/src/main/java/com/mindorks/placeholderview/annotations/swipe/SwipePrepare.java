@@ -11,10 +11,10 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation should be used on method without any members variables
- * Example : @SwipeIndex private void onSwipeIndex(){//something here}
+ * Example : @SwipePrepare private void onSwipeIndex(){//something here}
  * It is called when the card comes on top of the stack
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.METHOD)
-public @interface SwipeIndex {
+public @interface SwipePrepare {
 }

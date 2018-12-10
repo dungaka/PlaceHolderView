@@ -54,7 +54,7 @@ public class SwipeDirectionalViewBinderCompiler extends ViewBinderCompiler {
                         .addBindSwipeOutStateMethod()
                         .addBindSwipeCancelStateMethod()
                         .addBindSwipeHeadStateMethod()
-                        .addBindSwipeIndexStateMethod()
+                        .addBindSwipePrepareStateMethod()
                         .addBindSwipingDirectionMethod()
                         .addBindSwipeInDirectionMethod()
                         .addBindSwipeOutDirectionMethod()

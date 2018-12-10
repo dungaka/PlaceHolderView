@@ -79,7 +79,7 @@ public abstract class SwipeViewBinder<
     }
 
     protected void setOnIndex(int i) {
-        bindSwipeIndex(getResolver(), i);
+        bindSwipePrepare(getResolver(), i);
     }
 
     protected void setAnimatorListener() {
@@ -769,7 +769,7 @@ public abstract class SwipeViewBinder<
 
     protected abstract void bindSwipeHead(T resolver);
 
-    protected abstract void bindSwipeIndex(T resolver, int i);
+    protected abstract void bindSwipePrepare(T resolver, int i);
 
     protected interface SwipeCallback<T extends
             SwipeViewBinder<?,

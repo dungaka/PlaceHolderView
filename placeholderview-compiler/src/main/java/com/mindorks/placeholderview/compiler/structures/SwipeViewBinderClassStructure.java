@@ -6,7 +6,7 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeCancelState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeHead;
 import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
-import com.mindorks.placeholderview.annotations.swipe.SwipeIndex;
+import com.mindorks.placeholderview.annotations.swipe.SwipePrepare;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeView;
@@ -247,9 +247,9 @@ public class SwipeViewBinderClassStructure extends ViewBinderClassStructure {
         return this;
     }
 
-    public SwipeViewBinderClassStructure addBindSwipeIndexStateMethod() throws IllegalUseException {
-        MethodSpec.Builder bindSwipeIndexStateMethodBuilder = MethodSpec
-                .methodBuilder(NameStore.Method.BIND_SWIPE_INDEX)
+    public SwipeViewBinderClassStructure addBindSwipePrepareStateMethod() throws IllegalUseException {
+        MethodSpec.Builder bindSwipePrepareStateMethodBuilder = MethodSpec
+                .methodBuilder(NameStore.Method.BIND_SWIPE_PREPARE)
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PROTECTED)
                 .returns(void.class)
@@ -257,16 +257,16 @@ public class SwipeViewBinderClassStructure extends ViewBinderClassStructure {
                 .addParameter(int.class, NameStore.Variable.POSITION);
 
         for (ExecutableElement executableElement : getClassDetail().getExecutableElements()) {
-            SwipeIndex swipeIndex = executableElement.getAnnotation(SwipeIndex.class);
-            if (swipeIndex != null) {
-//                Validator.validateNoParameterMethod(executableElement, "@SwipeIndex");
-                bindSwipeIndexStateMethodBuilder.addStatement("$N.$N($L)",
+            SwipePrepare swipePrepare = executableElement.getAnnotation(SwipePrepare.class);
+            if (swipePrepare != null) {
+//                Validator.validateNoParameterMethod(executableElement, "@SwipePrepare");
+                bindSwipePrepareStateMethodBuilder.addStatement("$N.$N($L)",
                         NameStore.Variable.RESOLVER,
                         executableElement.getSimpleName(),
                         NameStore.Variable.POSITION);
             }
         }
-        getClassBuilder().addMethod(bindSwipeIndexStateMethodBuilder.build());
+        getClassBuilder().addMethod(bindSwipePrepareStateMethodBuilder.build());
         return this;
     }
 }

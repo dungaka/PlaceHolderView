@@ -97,7 +97,7 @@ public final class NameStore {
         public static final String BIND_SWIPE_OUT_STATE = "bindSwipeOutState";
         public static final String BIND_SWIPE_CANCEL_STATE = "bindSwipeCancelState";
         public static final String BIND_SWIPE_HEAD = "bindSwipeHead";
-        public static final String BIND_SWIPE_INDEX = "bindSwipeIndex";
+        public static final String BIND_SWIPE_PREPARE = "bindSwipePrepare";
 
         // SwipeDirectionalViewBinder
         public static final String BIND_SWIPING_DIRECTION = "bindSwipingDirection";
