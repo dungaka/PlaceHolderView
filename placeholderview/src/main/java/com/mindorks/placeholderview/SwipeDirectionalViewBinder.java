@@ -1,5 +1,6 @@
 package com.mindorks.placeholderview;
 
+import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
@@ -7,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
+
+import java.util.Arrays;
 
 /**
  * Created by janisharali on 09/08/17.
@@ -27,6 +30,7 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
         super(resolver, layoutId, nullable);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void setDefaultTouchListener(final V view) {
         setAnimatorListener();
@@ -96,7 +100,10 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
                                     && distSlideY < displayMetrics.heightPixels / getSwipeOption().getHeightSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, getSwipeType());
                             } else {
-                                if (!getSwipeOption().getIsPutBackActive()) {
+
+                                SwipeDirection swipeDirection = null;
+
+                                if (!getSwipeOption().getIsPutBackActive() && !getSwipeOption().isPutBackDirection(getCurrentSwipeDirection())) {
                                     blockTouch();
                                 }
 
@@ -113,15 +120,18 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
                                     if (delX > getSwipeOption().getSwipeVerticalThreshold()
                                             && delY <= getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transY = v.getTranslationY();
-                                        bindSwipeInDirectional(SwipeDirection.RIGHT);
+                                        swipeDirection = SwipeDirection.RIGHT;
+                                        bindSwipeInDirectional(swipeDirection);
 
                                     } else if (delX <= getSwipeOption().getSwipeVerticalThreshold()
                                             && delY > getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transX = v.getTranslationX();
-                                        bindSwipeInDirectional(SwipeDirection.BOTTOM);
+                                        swipeDirection = SwipeDirection.BOTTOM;
+                                        bindSwipeInDirectional(swipeDirection);
 
                                     } else {
-                                        bindSwipeInDirectional(SwipeDirection.RIGHT_BOTTOM);
+                                        swipeDirection = SwipeDirection.RIGHT_BOTTOM;
+                                        bindSwipeInDirectional(swipeDirection);
                                     }
 
                                 } else if (pointerCurrentPoint.x > pointerStartingPoint.x
@@ -134,15 +144,18 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
                                     if (delX > getSwipeOption().getSwipeVerticalThreshold()
                                             && delY <= getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transY = v.getTranslationY();
-                                        bindSwipeInDirectional(SwipeDirection.RIGHT);
+                                        swipeDirection = SwipeDirection.RIGHT;
+                                        bindSwipeInDirectional(swipeDirection);
 
                                     } else if (delX <= getSwipeOption().getSwipeVerticalThreshold()
                                             && delY > getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transX = v.getTranslationX();
-                                        bindSwipeOutDirectional(SwipeDirection.TOP);
+                                        swipeDirection = SwipeDirection.TOP;
+                                        bindSwipeOutDirectional(swipeDirection);
 
                                     } else {
-                                        bindSwipeOutDirectional(SwipeDirection.RIGHT_TOP);
+                                        swipeDirection = SwipeDirection.RIGHT_TOP;
+                                        bindSwipeOutDirectional(swipeDirection);
                                     }
 
                                 } else if (pointerCurrentPoint.x < pointerStartingPoint.x
@@ -155,15 +168,18 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
                                     if (delX > getSwipeOption().getSwipeVerticalThreshold()
                                             && delY <= getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transY = v.getTranslationY();
-                                        bindSwipeOutDirectional(SwipeDirection.LEFT);
+                                        swipeDirection = SwipeDirection.LEFT;
+                                        bindSwipeOutDirectional(swipeDirection);
 
                                     } else if (delX <= getSwipeOption().getSwipeVerticalThreshold()
                                             && delY > getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transX = v.getTranslationX();
-                                        bindSwipeInDirectional(SwipeDirection.BOTTOM);
+                                        swipeDirection = SwipeDirection.BOTTOM;
+                                        bindSwipeInDirectional(swipeDirection);
 
                                     } else {
-                                        bindSwipeOutDirectional(SwipeDirection.LEFT_BOTTOM);
+                                        swipeDirection = SwipeDirection.LEFT_BOTTOM;
+                                        bindSwipeOutDirectional(swipeDirection);
                                     }
 
                                 } else if (pointerCurrentPoint.x <= pointerStartingPoint.x
@@ -179,17 +195,22 @@ public abstract class SwipeDirectionalViewBinder<T, V extends SwipePlaceHolderVi
                                     if (delX > getSwipeOption().getSwipeVerticalThreshold()
                                             && delY <= getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transY = v.getTranslationY();
-                                        bindSwipeOutDirectional(SwipeDirection.LEFT);
+                                        swipeDirection = SwipeDirection.LEFT;
+                                        bindSwipeOutDirectional(swipeDirection);
 
                                     } else if (delX <= getSwipeOption().getSwipeVerticalThreshold()
                                             && delY > getSwipeOption().getSwipeHorizontalThreshold()) {
                                         transX = v.getTranslationX();
-                                        bindSwipeOutDirectional(SwipeDirection.TOP);
+                                        swipeDirection = SwipeDirection.TOP;
+                                        bindSwipeOutDirectional(swipeDirection);
 
                                     } else {
-                                        bindSwipeOutDirectional(SwipeDirection.LEFT_TOP);
+                                        swipeDirection = SwipeDirection.LEFT_TOP;
+                                        bindSwipeOutDirectional(swipeDirection);
                                     }
                                 }
+
+                                setCurrentSwipeDirection(swipeDirection);
 
                                 view.animate()
                                         .translationX(transX)

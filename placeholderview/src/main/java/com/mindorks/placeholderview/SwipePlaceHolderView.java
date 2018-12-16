@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import com.mindorks.placeholderview.listeners.ItemRemovedListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -404,6 +405,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
     public void activatePutBack(){
         mSwipeOption.setIsPutBackActive(true);
+    }
+
+    public void activatePutBack(SwipeDirection[] swipeViewReference){
+        mSwipeOption.setPutBackDirections(swipeViewReference);
     }
 
     public void deactivatePutBack(){
@@ -871,6 +876,7 @@ public class SwipePlaceHolderView extends FrameLayout implements
         private AtomicBoolean mIsViewToRestoreOnTouchLock;
         private AtomicBoolean mIsTouchSwipeLocked;
         private boolean mIsUndoEnabled = false;
+        private SwipeDirection[] mPutBackDirections;
 
         public SwipeOption() {
             mIsViewLocked = new AtomicBoolean(false);
@@ -945,5 +951,17 @@ public class SwipePlaceHolderView extends FrameLayout implements
         public void setIsUndoEnabled(boolean isUndoEnabled) {
             mIsUndoEnabled = isUndoEnabled;
         }
-    }
+
+        public void setPutBackDirections(SwipeDirection[] swipeDirections) {
+            this.mPutBackDirections = swipeDirections;
+        }
+
+        public SwipeDirection[] getPutBackDirections() {
+            return mPutBackDirections;
+        }
+
+        public boolean isPutBackDirection(SwipeDirection direction) {
+            return direction == null || (mPutBackDirections != null && Arrays.asList(mPutBackDirections).contains(direction));
+        }
+     }
 }

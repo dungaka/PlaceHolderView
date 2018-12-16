@@ -2,6 +2,7 @@ package com.mindorks.placeholderview;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.graphics.PointF;
 import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
@@ -11,6 +12,8 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+
+import java.util.Arrays;
 
 import static android.view.View.VISIBLE;
 
@@ -42,6 +45,7 @@ public abstract class SwipeViewBinder<
     private int mOriginalTopMargin;
     private float mTransXToRestore;
     private float mTransYToRestore;
+    private SwipeDirection currentSwipeDirection;
 
     protected SwipeViewBinder(T resolver, int layoutId, boolean nullable) {
         super(resolver, layoutId, nullable);
@@ -90,7 +94,7 @@ public abstract class SwipeViewBinder<
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mSwipeOption.getIsPutBackActive()) {
+                if (mSwipeOption.getIsPutBackActive() || currentSwipeDirection == SwipeDirection.BOTTOM) {
                     mLayoutView.animate()
                             .translationX(mTransXToRestore)
                             .translationY(mTransYToRestore)
@@ -153,6 +157,7 @@ public abstract class SwipeViewBinder<
         };
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void setDefaultTouchListener(final V view) {
         setAnimatorListener();
         final DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
@@ -221,7 +226,7 @@ public abstract class SwipeViewBinder<
                                     && distSlideY < displayMetrics.heightPixels / mSwipeOption.getHeightSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                             } else {
-                                if (!mSwipeOption.getIsPutBackActive()) {
+                                if (!getSwipeOption().getIsPutBackActive() && !getSwipeOption().isPutBackDirection(currentSwipeDirection)) {
                                     blockTouch();
                                 }
 
@@ -285,6 +290,7 @@ public abstract class SwipeViewBinder<
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void setHorizontalTouchListener(final V view) {
         setAnimatorListener();
         final DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
@@ -346,7 +352,7 @@ public abstract class SwipeViewBinder<
                             if (distSlideX < displayMetrics.widthPixels / mSwipeOption.getWidthSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                             } else {
-                                if (!mSwipeOption.getIsPutBackActive()) {
+                                if (!getSwipeOption().getIsPutBackActive() && !getSwipeOption().isPutBackDirection(currentSwipeDirection)) {
                                     blockTouch();
                                 }
 
@@ -393,6 +399,7 @@ public abstract class SwipeViewBinder<
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     protected void setVerticalTouchListener(final V view) {
         setAnimatorListener();
         final DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
@@ -454,7 +461,7 @@ public abstract class SwipeViewBinder<
                             if (distSlideY < displayMetrics.heightPixels / mSwipeOption.getHeightSwipeDistFactor()) {
                                 animateSwipeRestore(v, mOriginalTopMargin, mOriginalLeftMargin, mSwipeType);
                             } else {
-                                if (!mSwipeOption.getIsPutBackActive()) {
+                                if (!getSwipeOption().getIsPutBackActive() && !getSwipeOption().isPutBackDirection(currentSwipeDirection)) {
                                     blockTouch();
                                 }
 
@@ -566,8 +573,10 @@ public abstract class SwipeViewBinder<
     }
 
     protected void doSwipe(boolean isSwipeIn) {
+
+
         if (mLayoutView != null && mViewRemoveAnimatorListener != null && !mSwipeOption.getIsViewLocked()) {
-            if (!mSwipeOption.getIsPutBackActive()) {
+            if (!getSwipeOption().getIsPutBackActive() && !getSwipeOption().isPutBackDirection(currentSwipeDirection)) {
                 blockTouch();
             }
 
@@ -770,6 +779,14 @@ public abstract class SwipeViewBinder<
     protected abstract void bindSwipeHead(T resolver);
 
     protected abstract void bindSwipePrepare(T resolver, int i);
+
+    public SwipeDirection getCurrentSwipeDirection() {
+        return currentSwipeDirection;
+    }
+
+    public void setCurrentSwipeDirection(SwipeDirection currentSwipeDirection) {
+        this.currentSwipeDirection = currentSwipeDirection;
+    }
 
     protected interface SwipeCallback<T extends
             SwipeViewBinder<?,
