@@ -82,7 +82,7 @@ public abstract class SwipeViewBinder<
         }
     }
 
-    protected void setOnIndex(int i) {
+    protected void setOntPrepare(int i) {
         bindSwipePrepare(getResolver(), i);
     }
 
