@@ -446,6 +446,12 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
         if(mSwipeViewBinderList.size() > 0){
             mSwipeViewBinderList.get(0).setOnTouch();
+            if (mSwipeViewBinderList.size() > 3) {
+                mSwipeViewBinderList.get(3).setOntPrepare(3);
+            }
+//            for (int i =1; i < Math.min(mDisplayViewCount,mSwipeViewBinderList.size()); i++) {
+//                mSwipeViewBinderList.get(i).setOnIndex(i);
+//            }
         }
         if (mSwipeOption.isUndoEnabled()) {
             mRestoreResolverOnUndo = swipeViewBinder.getResolver();
