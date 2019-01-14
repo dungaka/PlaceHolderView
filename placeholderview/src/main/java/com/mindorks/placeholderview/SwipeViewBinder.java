@@ -37,6 +37,7 @@ public abstract class SwipeViewBinder<
     private View mSwipeInMsgView;
     private View mSwipeOutMsgView;
     private View mSwipeUpMsgView;
+    private View mSwipeDownMsgView;
     private P mSwipeOption;
     private Q mSwipeDecor;
     //    TODO: Make mHasInterceptedEvent a AtomicBoolean, to make it thread safe.
@@ -657,6 +658,14 @@ public abstract class SwipeViewBinder<
 
     protected void setSwipeUpMsgView(View swipeUpMsgView) {
         mSwipeUpMsgView = swipeUpMsgView;
+    }
+
+    protected View getSwipeDownMsgView() {
+        return mSwipeDownMsgView;
+    }
+
+    protected void setSwipeDownMsgView(View swipeDownMsgView) {
+        mSwipeDownMsgView = swipeDownMsgView;
     }
 
     protected V getLayoutView() {
