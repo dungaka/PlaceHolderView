@@ -340,13 +340,17 @@ public class SwipePlaceHolderView extends FrameLayout implements
         if (decor.getViewHeight() != 0 && decor.getViewWidth() != 0) {
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(decor.getViewWidth(), decor.getViewHeight());
             layoutParams.gravity = decor.getViewGravity();
+//            layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
+//                    decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0); replace with the line below to show cards padding at top
             layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
-                    decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0);
+                    decor.getMarginTop() + decor.getPaddingTop() * position, 0, 0);
             return layoutParams;
         } else {
             FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.gravity = decor.getViewGravity();
+//            layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
+//                    decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0); // replace with the line below to show cards padding at top
             layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
                     decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0);
             return layoutParams;
@@ -355,8 +359,10 @@ public class SwipePlaceHolderView extends FrameLayout implements
 
     protected <V extends FrameLayout> void setLayoutParamsWithSwipeDecor(V frame, int position, SwipeDecor decor) {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) frame.getLayoutParams();
+//        layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
+//                decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0);  // replace with the line below to show cards padding at top
         layoutParams.setMargins(decor.getMarginLeft() + decor.getPaddingLeft() * position,
-                decor.getMarginTop() - decor.getPaddingTop() * position, 0, 0);
+                decor.getMarginTop() + decor.getPaddingTop() * position, 0, 0);
         frame.setLayoutParams(layoutParams);
     }
 
@@ -519,7 +525,8 @@ public class SwipePlaceHolderView extends FrameLayout implements
                         (FrameLayout.LayoutParams) swipeViewBinderBelow.getLayoutView().getLayoutParams();
                 float value = (-mSwipeDecor.getPaddingTop() / finalDist) * distMoved
                         + (mSwipeDecor.getMarginTop() + mSwipeDecor.getPaddingTop() * i);
-                layoutParams.bottomMargin = (int) value;
+//                layoutParams.bottomMargin = (int) value; - replace with the line below to show cards padding at top
+                layoutParams.topMargin = (int) value;
 
                 value = (-mSwipeDecor.getPaddingLeft() / finalDist) * distMoved
                         + (mSwipeDecor.getMarginLeft() + mSwipeDecor.getPaddingLeft() * i);
