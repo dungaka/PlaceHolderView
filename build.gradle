@@ -6,12 +6,12 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
     }
 }
 
@@ -29,10 +29,10 @@ task clean(type: Delete) {
 
 ext {
     // Library version
-    libCompileSdkVersion = 25
+    libCompileSdkVersion = 33
     libMinSdkVersion = 16
-    libTargetSdkVersion = 25
-    libBuildToolsVersion = "27.0.3"
+    libTargetSdkVersion = 33
+    libBuildToolsVersion = "33.0.2"
     libSupportVersion = '25.4.0'
     libPublishVersionCode = 22
     libPublishVersionName = '1.0.3'

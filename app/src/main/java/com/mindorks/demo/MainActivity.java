@@ -1,10 +1,7 @@
 package com.mindorks.demo;
 
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.view.View;
 
 import com.mindorks.butterknifelite.ButterKnifeLite;
@@ -14,9 +11,14 @@ import com.mindorks.demo.drawer.DrawerMenuItem;
 import com.mindorks.demo.gallery.ImageTypeBig;
 import com.mindorks.demo.gallery.ImageTypeSmallPlaceHolder;
 import com.mindorks.placeholderview.PlaceHolderView;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -70,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupGallery(){
-
-//        mGalleryView.getBuilder()
-//                .setHasFixedSize(false)
-//                .setItemViewCacheSize(10)
-//                .setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-//                .setLayoutManager(new GridLayoutManager(this, 3));
-//        for (Image image : imageList){
-//            mGalleryView.addView(new ImageTypeBig(this.getApplicationContext(), mGalleryView, image.getUrl()));
-//        }
-
         List<Image> imageList = Utils.loadImages(this.getApplicationContext());
         List<Image> newImageList = new ArrayList<>();
         for (int i = 0; i <  (imageList.size() > 10 ? 10 : imageList.size()); i++) {
